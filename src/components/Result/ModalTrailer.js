@@ -25,7 +25,7 @@ const ModalTrailer = props => {
           ? setVideoKey(moviesTrailers[0].key)
           : setToast('No Trailer Available! 😿')
       })
-      .catch(console.log)
+      .catch(err => setToast(err.message))
   }, [props.movieId])
 
   return (
