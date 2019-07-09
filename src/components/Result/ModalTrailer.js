@@ -32,7 +32,7 @@ const ModalTrailer = props => {
     <>
       <Toast
         style={{
-          position: 'absolute',
+          position: 'fixed',
           top: 80,
           right: 0
         }}
@@ -43,7 +43,7 @@ const ModalTrailer = props => {
         animation={true}
       >
         <Toast.Header>
-          <strong className="mr-auto">There was an error!</strong>
+          <strong className="mr-auto">There was an error....</strong>
         </Toast.Header>
         <Toast.Body>
           <h3>{toast}</h3>
