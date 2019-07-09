@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react'
-import { Modal, Button } from 'react-bootstrap'
+import { Modal, Button, Toast } from 'react-bootstrap'
 import YoutubeVideo from '../Result/YoutubeVideo'
 import '../Styles/ModalTrailer.css'
 import { key, baseUrl } from '../../api'
 
 const ModalTrailer = props => {
-  const [videoKey, setVideoKey] = useState(undefined)
+  const [videoKey, setVideoKey] = useState(null)
+  const [toast, setToast] = useState(null)
 
   useEffect(() => {
     const movieTrailerEndPoint = `${baseUrl}/movie/${
@@ -19,22 +20,40 @@ const ModalTrailer = props => {
         return response.json()
       })
       .then(movieTrailer => {
-        console.log('Here is the modal movie trailer', movieTrailer)
-
-        const moviesTrailer = movieTrailer.videos.results[0].key
-
-        setVideoKey(moviesTrailer)
+        const moviesTrailers = movieTrailer.videos.results
+        moviesTrailers.length > 0
+          ? setVideoKey(moviesTrailers[0].key)
+          : setToast('No Trailer Available! 😿')
       })
       .catch(console.log)
   }, [props.movieId])
 
   return (
-    <div>
+    <>
+      <Toast
+        style={{
+          position: 'absolute',
+          top: 80,
+          right: 0
+        }}
+        show={toast && !videoKey}
+        onClose={() => setToast(null)}
+        delay={3000}
+        autohide
+        animation={true}
+      >
+        <Toast.Header>
+          <strong className="mr-auto">There was an error!</strong>
+        </Toast.Header>
+        <Toast.Body>
+          <h3>{toast}</h3>
+        </Toast.Body>
+      </Toast>
       <Modal
         size="lg"
         aria-labelledby="contained-modal-title-vcenter"
         centered
-        show={true}
+        show={videoKey ? true : false}
         onHide={props.closeCallback}
       >
         <Modal.Body>
@@ -46,7 +65,7 @@ const ModalTrailer = props => {
           </Button>
         </Modal.Footer>
       </Modal>
-    </div>
+    </>
   )
 }
 
