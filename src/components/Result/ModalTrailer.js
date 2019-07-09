@@ -15,7 +15,7 @@ const ModalTrailer = props => {
 
     fetch(movieTrailerEndPoint)
       .then(response => {
-        if (!response.ok) throw Error(`It went wrong 😿 ${response.status} ${response.statusText}`)
+        if (!response.ok) throw Error(`😿 ${response.status} trailer ${response.statusText}`)
         return response.json()
       })
       .then(movieTrailer => {
