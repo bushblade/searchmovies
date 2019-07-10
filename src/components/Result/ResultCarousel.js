@@ -1,24 +1,11 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { Carousel } from 'react-bootstrap'
 import '../Styles/ResultCarousel.css'
-
-const getUpcomingMovie =
-  'https://api.themoviedb.org/3/movie/upcoming?api_key=79ce19b11f80253ec95757f195144888&language=en-US&region=US&with_release_type=2|3'
-
-const imageBaseUrl = 'https://image.tmdb.org/t/p/original/'
+import { upcomingMovies, imageBaseUrl } from '../../api'
+import { useMovies } from '../../hooks/useMovies'
 
 const ResultCarousel = props => {
-  const [movies, setMoviesState] = useState([])
-
-  useEffect(() => {
-    fetch(getUpcomingMovie)
-      .then(response => response.json())
-      .then(upComingMovie => {
-        const movieData = upComingMovie.results
-        setMoviesState(movieData.filter(m => m.backdrop_path))
-      })
-      .catch(err => console.log(err))
-  }, [])
+  const [movies, error] = useMovies(upcomingMovies)
 
   const result = movies.map((movie, index) => {
     return (

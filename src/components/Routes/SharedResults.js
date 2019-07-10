@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { Container, Card, Col, Row, Button } from 'react-bootstrap'
 import { useTrail, animated, config } from 'react-spring'
+import { useMovies } from '../../hooks/useMovies'
+import { imageBaseUrl } from '../../api'
 
 import ModalTrailer from '../Result/ModalTrailer'
-
-const imageBaseUrl = 'https://image.tmdb.org/t/p/original/'
-
 const SharedResults = ({ url }) => {
-  const [movies, setMovies] = useState([])
+  const [movies, error] = useMovies(url)
   const [modal, setModalId] = useState(null)
 
   const trail = useTrail(movies.length, {
@@ -19,19 +18,6 @@ const SharedResults = ({ url }) => {
     },
     config: config.stiff
   })
-
-  useEffect(() => {
-    fetch(url)
-      .then(response => {
-        if (!response.ok)
-          throw Error(`It went wrong ${response.status} message: ${response.statusText}`)
-        return response.json()
-      })
-      .then(data => {
-        setMovies(data.results.filter(m => m.backdrop_path))
-      })
-      .catch(console.log)
-  }, [url])
 
   const showMovies = trail.map((props, index) => {
     const movie = movies[index]
